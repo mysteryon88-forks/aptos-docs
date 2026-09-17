@@ -5,10 +5,11 @@ sidebar:
   label: "示例"
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import { Aside, Steps } from '@astrojs/starlight/components';
 
 有关说明如何使用 SDK 核心概念的示例代码，请参阅：
 
+- [快速入门](/zh/build/sdks/python-sdk/quickstart)
 - [获取数据](/zh/build/sdks/python-sdk/fetch-data-via-sdk)
 - [构建、模拟和提交交易](/zh/build/sdks/python-sdk/building-transactions)
 
@@ -33,7 +34,12 @@ SDK 仓库中的 [`v2/examples` 文件夹](https://github.com/aptos-labs/aptos-p
 | `custom_coin_fungible_asset.py` | Coin API 与 Fungible Asset API |
 | `script_transaction.py`         | Script payload 构造             |
 
-v1 示例如 `transfer_coin.py` 和 `fee_payer_transfer_coin.py` 位于顶层 [`examples` 文件夹](https://github.com/aptos-labs/aptos-python-sdk/tree/main/examples)。
+v1 示例如 `transfer_coin.py` 和 `fee_payer_transfer_coin.py` 位于顶层 [`examples` 文件夹](https://github.com/aptos-labs/aptos-python-sdk/tree/main/examples)。新项目应使用 v2 示例。
+
+<Aside type="note">
+  请优先使用这些仓库示例，而不是复制旧博客中的代码片段。Python SDK v2 API
+  是受支持的接口，examples 文件夹会跟踪当前 API。
+</Aside>
 
 ### 如何运行示例
 
@@ -63,5 +69,6 @@ v1 示例如 `transfer_coin.py` 和 `fee_payer_transfer_coin.py` 位于顶层 [`
 
 ## 有用的参考代码
 
+- [v2 测试](https://github.com/aptos-labs/aptos-python-sdk/tree/main/v2/tests) - 覆盖 v2 API 的单元测试和集成测试。
 - [SDK 源代码](https://github.com/aptos-labs/aptos-python-sdk) - 内含解释每个函数作用的行内注释。
 - [v1 到 v2 迁移指南](https://github.com/aptos-labs/aptos-python-sdk/blob/main/MIGRATION.md) - 现有 v1 代码的 API 映射。

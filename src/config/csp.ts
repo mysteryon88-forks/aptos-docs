@@ -36,16 +36,17 @@ const FIGMA_HOSTS = withHttps("embed.figma.com");
 const GOOGLE_FONTS_HOSTS = withHttps(["fonts.googleapis.com", "fonts.gstatic.com"]);
 
 /**
- * Hash of the `is:inline` script in Starlight's Pagefind search component, which
- * reveals the ⌘K hint in the search button and swaps the modifier key on Apple
- * devices. Astro does not hash `is:inline` scripts, so without this the hint
- * stays hidden. `tests/search-provider.test.ts` recomputes it from the installed
- * Starlight package so a version bump that edits the script fails loudly.
- */
-const STARLIGHT_SEARCH_SHORTCUT_HASH = "sha256-f/zAUE74ucc3JYp4r4QQvkJofoQdkOIhHYK+jeZ6eko=";
-
-/**
  * Content Security Policy configuration for Astro.
+ *
+ * Several first-party scripts and styles have to run inline:
+ * - Starlight ships `is:inline` scripts (theme, sidebar restore, search
+ *   shortcut) that Astro does not hash.
+ * - astro-mermaid injects a `<style>` element at runtime on every page.
+ *
+ * Browsers ignore `'unsafe-inline'` when a hash is present in the same
+ * directive. Do not add hashes here. Astro 7.2.5+ omits auto hashes when
+ * `'unsafe-inline'` is set. The Vercel adapter patch (`cspMode: "global"`)
+ * ships this as one HTTP header instead of one route per page.
  *
  * Pagefind searches inside a WebAssembly module running in a Web Worker created
  * from a blob URL, both of which a strict policy blocks by default. The failure
@@ -89,16 +90,38 @@ export function createCspConfig(searchProvider: SearchProvider = "algolia") {
         { resource: GTM_HOST, kind: "element" },
         { resource: VERCEL_HOSTS, kind: "element" },
       ],
-      // Astro 7.1.1 does not automatically include these two virtual Starlight
-      // scripts in its generated CSP. Keep their exact hashes here so the theme
-      // provider and picker remain functional while retaining a strict policy.
-      hashes: [
-        { hash: "sha256-VWo5Wp4aqSj6nSgMpeAp9cKieaoIfwFUAunAVugI5gA=", kind: "element" },
-        { hash: "sha256-GkZBRnvSuhtx/cvzvukVkX2JJZW+DdPlVr7BX8Tefqo=", kind: "element" },
-        ...(usesPagefind
-          ? ([{ hash: STARLIGHT_SEARCH_SHORTCUT_HASH, kind: "element" }] as const)
-          : []),
-      ],
     },
   } satisfies CspConfig;
+}
+
+/**
+ * Serialize `createCspConfig` into a Content-Security-Policy header.
+ *
+ * Useful for tests and as a hash-free reference of the intended policy. The
+ * production header is rendered by Astro (with `patches/astro.patch`) and
+ * emitted globally by the patched Vercel adapter.
+ */
+export function serializeCspHeader(searchProvider: SearchProvider = "pagefind"): string {
+  const csp = createCspConfig(searchProvider);
+  const scriptDefault = csp.scriptDirective.resources.filter(
+    (resource): resource is string => typeof resource === "string",
+  );
+  const scriptElem = csp.scriptDirective.resources.flatMap((resource) =>
+    typeof resource === "object" && resource.kind === "element" ? [resource.resource] : [],
+  );
+  const styleElem = csp.styleDirective.resources.flatMap((resource) =>
+    resource.kind === "element" ? [resource.resource] : [],
+  );
+  const styleAttr = csp.styleDirective.resources.flatMap((resource) =>
+    resource.kind === "attribute" ? [resource.resource] : [],
+  );
+
+  return [
+    ...csp.directives,
+    `script-src ${scriptDefault.join(" ")}`,
+    `script-src-elem ${scriptElem.join(" ")}`,
+    "style-src 'self'",
+    `style-src-elem ${styleElem.join(" ")}`,
+    `style-src-attr ${styleAttr.join(" ")}`,
+  ].join("; ");
 }

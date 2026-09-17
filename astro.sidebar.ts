@@ -133,6 +133,7 @@ export const sidebar = [
       group("guides.group.integration", {
         collapsed: true,
         items: [
+          "build/guides/payments",
           "build/guides/exchanges",
           "build/guides/application-integration",
           "build/guides/oracles",
@@ -209,6 +210,7 @@ export const sidebar = [
             collapsed: true,
             items: [
               "build/sdks/go-sdk",
+              "build/sdks/go-sdk/quickstart",
               "build/sdks/go-sdk/account",
               "build/sdks/go-sdk/fetch-data-via-sdk",
               "build/sdks/go-sdk/go-examples",
@@ -220,6 +222,7 @@ export const sidebar = [
                   "build/sdks/go-sdk/building-transactions/simulating-transactions",
                   "build/sdks/go-sdk/building-transactions/bcs-format",
                   "build/sdks/go-sdk/building-transactions/multi-agent-transactions",
+                  "build/sdks/go-sdk/building-transactions/orderless-transactions",
                   "build/sdks/go-sdk/building-transactions/sponsoring-transactions",
                 ],
               }),
@@ -259,6 +262,7 @@ export const sidebar = [
             collapsed: true,
             items: [
               "build/sdks/python-sdk",
+              "build/sdks/python-sdk/quickstart",
               "build/sdks/python-sdk/account",
               "build/sdks/python-sdk/fetch-data-via-sdk",
               "build/sdks/python-sdk/python-examples",
@@ -270,6 +274,7 @@ export const sidebar = [
                   "build/sdks/python-sdk/building-transactions/simulating-transactions",
                   "build/sdks/python-sdk/building-transactions/bcs-format",
                   "build/sdks/python-sdk/building-transactions/multi-agent-transactions",
+                  "build/sdks/python-sdk/building-transactions/orderless-transactions",
                   "build/sdks/python-sdk/building-transactions/sponsoring-transactions",
                 ],
               }),
@@ -291,6 +296,7 @@ export const sidebar = [
             collapsed: true,
             items: [
               "build/sdks/rust-sdk",
+              "build/sdks/rust-sdk/quickstart",
               "build/sdks/rust-sdk/account",
               "build/sdks/rust-sdk/fetch-data-via-sdk",
               "build/sdks/rust-sdk/rust-examples",
@@ -302,6 +308,7 @@ export const sidebar = [
                   "build/sdks/rust-sdk/building-transactions/simulating-transactions",
                   "build/sdks/rust-sdk/building-transactions/bcs-format",
                   "build/sdks/rust-sdk/building-transactions/multi-agent-transactions",
+                  "build/sdks/rust-sdk/building-transactions/orderless-transactions",
                   "build/sdks/rust-sdk/building-transactions/sponsoring-transactions",
                 ],
               }),
@@ -887,15 +894,51 @@ export const sidebar = [
   // --- REFERENCE Tab (Focus: API/Tool Lookup) ---
   group("reference", {
     items: [
-      // AIPs
+      "network/glossary",
+      "build/smart-contracts/error-codes",
+      "network/blockchain/transaction-payloads",
       group("build.group.aips", {
         collapsed: true,
-        items: ["build/aips", "build/aips/aip-88", "build/aips/aip-115"],
+        items: ["build/aips", "build/aips/aip-88", "build/aips/aip-115", "build/aips/aip-123"],
       }),
-      "network/glossary",
-      "build/external-resources",
+      group("reference.group.move", {
+        collapsed: true,
+        items: [
+          {
+            label: "Framework Book",
+            link: "https://aptos-labs.github.io/framework-book/",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+          {
+            label: "Aptos Framework",
+            link: "https://aptos-labs.github.io/framework-book/aptos-framework/overview.html",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+          {
+            label: "Aptos Standard Library",
+            link: "https://aptos-labs.github.io/framework-book/aptos-stdlib/overview.html",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+          {
+            label: "Move Standard Library",
+            link: "https://aptos-labs.github.io/framework-book/move-stdlib/overview.html",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+          {
+            label: "Aptos Token Objects",
+            link: "https://aptos-labs.github.io/framework-book/aptos-token-objects/overview.html",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+          {
+            label: "Move Book",
+            link: "https://aptos-labs.github.io/move-book/",
+            attrs: { target: "_blank", rel: "noopener" },
+          },
+        ],
+      }),
       "build/indexer/indexer-api/indexer-reference",
       ...(openAPISidebarGroups as never[]),
+      "build/external-resources",
     ],
   }),
 
@@ -904,17 +947,20 @@ export const sidebar = [
       "build/ai",
       group("ai.group.aptos-mcp", {
         collapsed: true,
-        items: ["build/ai/aptos-mcp", "build/ai/aptos-mcp/claude", "build/ai/aptos-mcp/cursor"],
+        items: [
+          "build/ai/aptos-mcp",
+          "build/ai/aptos-mcp/claude",
+          "build/ai/aptos-mcp/cursor",
+          "build/ai/aptos-mcp/codex",
+        ],
       }),
       {
         label: "Agent Skills",
         link: "build/ai/aptos-agent-skills",
-        badge: { text: "NEW", variant: "tip" },
       },
       {
         label: "LLMs.txt",
         link: "llms-txt",
-        badge: { text: "NEW", variant: "tip" },
       },
     ],
   }),
